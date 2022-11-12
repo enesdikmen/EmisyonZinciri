@@ -2,7 +2,7 @@ import './App.css';
 import Header from './components/Header';
 import MainPage from './pages/MainPage';
 import EmissionsPage from './pages/EmissionsPage';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ProcessingTab from './components/ProcessingTab';
 
 
@@ -18,8 +18,9 @@ import {
 function App() {
   const [processingState, setProcessingState] = useState({ show: false, text: "Processing", icon: "loading" })
 
+ 
   return (
-    <div style={{ height: '2600px' }} className='mainback'>
+    <div >
 
     <Router >
       <Header />

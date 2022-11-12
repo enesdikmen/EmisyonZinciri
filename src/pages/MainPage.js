@@ -8,7 +8,7 @@ const MainPage = () => {
     return (
         <div className=''>
             {/* Banner image karar ver */}
-            <div className="w-100 vh-100 banner-image-main " >
+            <div className="banner-image-main  " >
                 <Row className='justify-content-center'>
                     <Col xs lg='10'>
 
@@ -38,8 +38,6 @@ const MainPage = () => {
                 </Row>
 
 
-            </div>
-            <div className="w-100 vh-100 banner-image-main " >
             </div>
 
         </div>

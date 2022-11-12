@@ -9,7 +9,20 @@ const Header = ({ }) => {
     const [isWalletConnected, setIsWalletConnect] = useState(false);
     const [walletId, setWalletId] = useState("");
 
+    const [isDark, setIsDark] = useState(false);
 
+    
+
+
+    useEffect(() => {
+        window.addEventListener('scroll', function () {
+            if (window.pageYOffset > 70) {
+                setIsDark(true)
+            } else {
+                setIsDark(false)
+            }
+        });
+    }, []);
 
     async function handleConnectWallet() {
         console.log("connecting to wallet...");
@@ -30,7 +43,7 @@ const Header = ({ }) => {
     }
     return (
 
-        <nav className="navbar fixed-top navbar-expand-lg navbar-dark p-md-3">
+        <nav id="navbar" className={"navbar fixed-top navbar-expand-lg navbar-dark p-md-3 " + (isDark ? 'header-dark' : '')}>
             <div className="container align-middle align-items-center">
                 <Navbar.Brand as={Link} to="/"><img
                     src={require('../img/tr_logo_white.png')}
@@ -39,11 +52,11 @@ const Header = ({ }) => {
                     className="d-inline-block align-top"
                     alt="React Bootstrap logo"
                 /></Navbar.Brand>
-                <div style={{height: "60px", width: "3px, "}} className="vertical-header vr mt-2"></div> 
+                <div style={{ height: "60px", width: "3px, " }} className="vertical-header vr mt-2"></div>
 
-                <Nav.Link as={Link} to="/" className="ms-3 navbar-brand fs-5 align-middle align-items-center" href="emissions"> 
-                <div className='my-auto'><strong>  Emisyon Zinciri</strong></div>
-                    </Nav.Link >
+                <Nav.Link as={Link} to="/" className="ms-3 navbar-brand fs-5 align-middle align-items-center" href="emissions">
+                    <div className='my-auto'><strong>  Emisyon Zinciri</strong></div>
+                </Nav.Link >
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -62,14 +75,12 @@ const Header = ({ }) => {
                         {isWalletConnected ?
                             <>
 
-                                <li>
 
+                                <li className="nav-item mx-3">
+                                    <Nav.Link as={Link} to="/emissions" className="nav-link text-white">Emisyon Takiplerim</Nav.Link>
                                 </li>
                                 <li className="nav-item mx-3">
-                                    <Nav.Link as={Link} to="/emissions" className="nav-link text-white">Emisyonlar</Nav.Link>
-                                </li>
-                                <li className="nav-item mx-3">
-                                    <Nav.Link as={Link} to="/orderHistory" className="nav-link text-white">Veriler</Nav.Link>
+                                    <Nav.Link as={Link} to="/data" className="nav-link text-white">Veriler</Nav.Link>
                                 </li>
                                 <li className="nav-item mx-3">
                                     <a onClick={() => { }} className="nav-link text-white" href="#">{walletId}</a>
