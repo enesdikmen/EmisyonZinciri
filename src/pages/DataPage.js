@@ -1,54 +1,31 @@
 import React, { useState, useEffect } from 'react'
 
 import { Stack, Row, Col } from 'react-bootstrap'
+import contract from '../contract'
 
-const DataPage = ({ setProcessingState, emissionHistory }) => {
+const DataPage = ({ setProcessingState, emissionHistory, signer }) => {
     const [allEmissions, setAllEmissions] = useState([])
 
+    var myContract = contract();
 
     useEffect(() => {
 
-
         const getUserEmissionHistory = async () => {
-            // mock wait
-            let res = await fetch('https://api.rapidmock.com/mocks/89mEw', {
-                method: "GET",
-                headers: {
-                    "x-rapidmock-delay": "100"
-                },
-            })
 
-            res = {
-                "data": [
-                    { 'date': '12.02.2022', 'emissionPointId': "34000123", "emissionAmount": "2.12" },
-                    { 'date': '12.02.2022', 'emissionPointId': "34000124", "emissionAmount": "4.22" },
-                    { 'date': '12.02.2022', 'emissionPointId': "34000125", "emissionAmount": "0.95" },
+            myContract = myContract.connect(signer)
 
-                    { 'date': '11.02.2022', 'emissionPointId': "34000123", "emissionAmount": "2.10" },
-                    { 'date': '11.02.2022', 'emissionPointId': "34000124", "emissionAmount": "3.91" },
-                    { 'date': '11.02.2022', 'emissionPointId': "34000125", "emissionAmount": "1.05" },
+            let allEmissionsFilter = myContract.filters.EmissionUpdated()
+            let res = await myContract.queryFilter(allEmissionsFilter, -2000, "latest")
+            console.log("res: ", res);
 
-                    { 'date': '10.02.2022', 'emissionPointId': "34000123", "emissionAmount": "2.14" },
-                    { 'date': '10.02.2022', 'emissionPointId': "34000124", "emissionAmount": "4.66" },
-                    { 'date': '10.02.2022', 'emissionPointId': "34000125", "emissionAmount": "1.07" },
+            // res = res[0].args
 
-                    { 'date': '09.02.2022', 'emissionPointId': "34000123", "emissionAmount": "2.14" },
-                    { 'date': '09.02.2022', 'emissionPointId': "34000124", "emissionAmount": "4.66" },
-                    { 'date': '09.02.2022', 'emissionPointId': "34000125", "emissionAmount": "1.07" },
-                ]
+            // console.log("filter res: ", res.tracker.toString());
+            // console.log("filter res: ", res.emissionPointId.toString());
+            // console.log("filter res: ", res.emission.toNumber());
 
-            }
 
-            let emissionData = res['data']
-            let result = emissionData.reduce(function (r, a) {
-                r[a.date] = r[a.date] || [];
-                r[a.date].push(a);
-                return r;
-            }, Object.create(null));
-
-            console.log("res", result)
-
-            setAllEmissions(result)
+            // setAllEmissions(result)
         }
 
         getUserEmissionHistory();
@@ -64,12 +41,12 @@ const DataPage = ({ setProcessingState, emissionHistory }) => {
 
                 <Row className='justify-content-center'>
                     <Col xs lg='10'>
-                       
+
                         <p className='text-start fs-4 reg-text mt-5 mb-1'>Günlük Toplam Kayıtlarım</p>
 
                         <Stack gap={3}>
 
-                                {/* <EmissionHistoryCard setProcessingState={setProcessingState} dailyEmission={emissionHistory[item]}></EmissionHistoryCard> */}
+                            {/* <EmissionHistoryCard setProcessingState={setProcessingState} dailyEmission={emissionHistory[item]}></EmissionHistoryCard> */}
 
 
                         </Stack>
@@ -77,7 +54,7 @@ const DataPage = ({ setProcessingState, emissionHistory }) => {
                 </Row>
             </div>
         </div>
-        
+
     )
 }
 

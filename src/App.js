@@ -5,6 +5,7 @@ import DataPage from './pages/DataPage';
 import EmissionsPage from './pages/EmissionsPage';
 import React, { useState, useEffect } from 'react'
 import ProcessingTab from './components/ProcessingTab';
+import contract from './contract'
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -21,69 +22,76 @@ function App() {
   const [emissionHistory, setEmissionHistory] = useState([])
   const [provider, setProvider] = useState(null)
   const [signer, setSigner] = useState(null)
-  const [signerAdress, setSignerAddress] = useState(null)
-  
+  const [signerAddress, setSignerAddress] = useState(null)
+  const [notifier, setNotifier] = useState(null)
+  const [blockNum, setBlockNum] = useState(null)
+  const [userEmissionData, setUserEmissionData] = useState(null)
+
+  const [checkEmissionPoint, setCheckEmissionPoint] = useState("")
+
+  var myContract = contract();
 
   useEffect(() => {
+
     const getUserEmissionHistory = async () => {
       // mock wait
-      let res = await fetch('https://api.rapidmock.com/mocks/89mEw', {
-        method: "GET",
-        headers: {
-          "x-rapidmock-delay": "100"
-        },
-      })
 
-      res = {
-        "data": [
-          { 'date': '12.02.2022', 'emissionPointId': "34000123", "emissionAmount": "2.12" },
-          { 'date': '12.02.2022', 'emissionPointId': "34000124", "emissionAmount": "4.22" },
-          { 'date': '12.02.2022', 'emissionPointId': "34000125", "emissionAmount": "0.95" },
+      if (signerAddress == null) return;
+      myContract = myContract.connect(signer)
 
-          { 'date': '11.02.2022', 'emissionPointId': "34000123", "emissionAmount": "2.10" },
-          { 'date': '11.02.2022', 'emissionPointId': "34000124", "emissionAmount": "3.91" },
-          { 'date': '11.02.2022', 'emissionPointId': "34000125", "emissionAmount": "1.05" },
 
-          { 'date': '10.02.2022', 'emissionPointId': "34000123", "emissionAmount": "2.14" },
-          { 'date': '10.02.2022', 'emissionPointId': "34000124", "emissionAmount": "4.66" },
-          { 'date': '10.02.2022', 'emissionPointId': "34000125", "emissionAmount": "1.07" },
+      let userEmissionsFilter = myContract.filters.EmissionUpdated(signerAddress)
+      let userEmissions = await myContract.queryFilter(userEmissionsFilter, -2000, "latest")
+      console.log("res: ", res);
+      
 
-          { 'date': '09.02.2022', 'emissionPointId': "34000123", "emissionAmount": "2.14" },
-          { 'date': '09.02.2022', 'emissionPointId': "34000124", "emissionAmount": "4.66" },
-          { 'date': '09.02.2022', 'emissionPointId': "34000125", "emissionAmount": "1.07" },
-        ]
+      for(let i=0; i<userEmissions.lenght; i++){
 
       }
+       res = res[0]?.args
+      
+      console.log("filter res: ", res.tracker.toString());
+      console.log("filter res: ", res.emissionPointId.toString());
+      console.log("filter res: ", res.emission.toNumber());
 
-      let emissionData = res['data']
-      let result = emissionData.reduce(function (r, a) {
-        r[a.date] = r[a.date] || [];
-        r[a.date].push(a);
-        return r;
-      }, Object.create(null));
+      let notificationsFilter = myContract.filters.CheckerDesignated(null, null, signerAddress)
+      let resNotif = await myContract.queryFilter(notificationsFilter, -2000, "latest")
+      console.log("resnotif: ", resNotif[0].args.timestamp.toString());
+      var blockNumber = resNotif[0].args.timestamp.toString()
+      var notifier = resNotif[0].args.notifier.toString()
+      setBlockNum(blockNumber)
+      setNotifier(notifier)
+      console.log("resnotif: ", blockNumber, notifier);
 
-      console.log("res", result)
 
-      setEmissionHistory(result)
+      let resSusp = await myContract.suspiciousEmissions(notifier, blockNumber)
+      console.log("susp:", resSusp.emissionPointId.toString());
+      setCheckEmissionPoint(resSusp.emissionPointId.toString())
+      // let blockNumber = resNotif?.[0].args[]
+
+
+
+
+      // setEmissionHistory(result)
     }
 
     getUserEmissionHistory();
 
-  }, []);
+  }, [signerAddress]);
 
 
   return (
     <div >
 
       <Router >
-        <Header setSigner={setSigner} setProvider={setProvider} setSignerAddress={setSignerAddress}/>
+        <Header setSigner={setSigner} setProvider={setProvider} setSignerAddress={setSignerAddress} />
 
 
         <Routes >
 
           <Route path="" element={<MainPage />} />
-          <Route path="emissions" element={<EmissionsPage setProcessingState={setProcessingState} emissionHistory={emissionHistory} signer={signer}/>} />
-          <Route path="data" element={<DataPage setProcessingState={setProcessingState} emissionHistory={emissionHistory}/>} />
+          <Route path="emissions" element={<EmissionsPage setProcessingState={setProcessingState} emissionHistory={emissionHistory} signer={signer} notifier={notifier} blockNum={blockNum} checkEmissionPoint={checkEmissionPoint}/>} />
+          <Route path="data" element={<DataPage setProcessingState={setProcessingState} emissionHistory={emissionHistory} signer={signer}/>} />
 
 
         </Routes>

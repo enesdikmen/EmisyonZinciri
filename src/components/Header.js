@@ -80,7 +80,7 @@ const Header = ({ setProvider, setSigner, setSignerAddress }) => {
 
 
                                 <li className="nav-item mx-3">
-                                    <Nav.Link as={Link} to="/emissions" className="nav-link text-white">Emisyon Takiplerim</Nav.Link>
+                                    <Nav.Link as={Link} to="/emissions" className="nav-link text-white">Emisyonlar</Nav.Link>
                                 </li>
                                 <li className="nav-item mx-3">
                                     <Nav.Link as={Link} to="/data" className="nav-link text-white">Veriler</Nav.Link>

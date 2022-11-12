@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react'
 import { Stack, Row, Col } from 'react-bootstrap'
 import EmissionHistoryCard from '../components/EmissionHistoryCard';
 import SuspiciousCard from '../components/SuspiciousCard';
+import CheckerInsertCard from '../components/CheckerInsertCard';
 
-const EmissionsPage = ({ setProcessingState, emissionHistory, signer }) => {
+const EmissionsPage = ({ setProcessingState, emissionHistory, signer, blockNum, notifier, checkEmissionPoint }) => {
 
 
 
@@ -16,10 +17,15 @@ const EmissionsPage = ({ setProcessingState, emissionHistory, signer }) => {
 
                 <Row className='justify-content-center'>
                     <Col xs lg='10'>
-                       
+                        <p className='text-start fs-4 reg-text mt-2 mb-2'>Şüpheli Emisyon Bildir</p>
+
+                        <CheckerInsertCard className='mb-5' setProcessingState={setProcessingState} signer={signer} checkEmissionPoint={checkEmissionPoint} blockNum={blockNum} notifier={notifier}></CheckerInsertCard>
+                        <p className='text-start fs-4 reg-text mt-2 mb-2'>Şüpheli Emisyon Bildir</p>
+
+                        <SuspiciousCard className='mb-5' setProcessingState={setProcessingState} signer={signer}></SuspiciousCard>
+
                         <p className='text-start fs-4 reg-text mt-5 mb-1'>Geçmiş Kayıtlarım</p>
-                        
-                        <SuspiciousCard setProcessingState={ setProcessingState} signer={signer}></SuspiciousCard>
+
 
                         <Stack gap={3}>
 
@@ -34,7 +40,7 @@ const EmissionsPage = ({ setProcessingState, emissionHistory, signer }) => {
                 </Row>
             </div>
         </div>
-        
+
     )
 }
 

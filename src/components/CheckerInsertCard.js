@@ -3,28 +3,16 @@ import { Row, Col, Button, Card, Form, InputGroup } from 'react-bootstrap'
 import { waitFor } from '../utils'
 import contract  from '../contract'
 
-const SuspiciousCard = ({ setProcessingState, signer }) => {
+const CheckerInsertCard = ({ setProcessingState, signer, notifier, blockNum, checkEmissionPoint }) => {
 
     const [emissionPointID, setEmissionPointID] = useState("")
-    const [trackerAddress, setTrackerAddress] = useState("")
+    const [emissionAmount, setEmissionAmount] = useState("")
 
     var myContract = contract();
     myContract = myContract.connect(signer)
     const handleNotify = async () =>{
-        
-        
-        setProcessingState({ show: true, text: "Emisyon giriliyor", icon: "loading" })
-        
-        
-        let tResponse = await myContract.notifySuspiciousEmission(trackerAddress, emissionPointID)
-        await tResponse.wait()
-        console.log('notify res:', tResponse);
-
-        setProcessingState({ show: true, text: "Emisyon girildi.", icon: "done" })
-        setTimeout(() => {
-            setProcessingState({ show: false, text: "Emisyon girildi.", icon: "done"});
-        }, 3000);
-
+        const res = await myContract.checkEmission(notifier, blockNum, 20)
+        await res.wait()
     }
 
     return (
@@ -45,8 +33,7 @@ const SuspiciousCard = ({ setProcessingState, signer }) => {
                                     <InputGroup className="">
                                         <Form.Control
                                             type='text'
-                                            value={emissionPointID}
-                                            onInput={e => setEmissionPointID(e.target.value)}
+                                            value={checkEmissionPoint}
                                             className='text-end'
                                             placeholder=""
                                         />
@@ -57,15 +44,15 @@ const SuspiciousCard = ({ setProcessingState, signer }) => {
                         <Col xs lg='6'>
                             <Row>
                                 <Form.Label className='text-end' column lg={5}>
-                                    Takipçi Adresi
+                                    Emisyon Miktarı
                                 </Form.Label>
                                 <Col lg={7}>
                                     <InputGroup className="mb-3">
                                         <Form.Control
                                             type='text'
 
-                                            value={trackerAddress}
-                                            onInput={e => setTrackerAddress(e.target.value)}
+                                            value={emissionAmount}
+                                            onInput={e => setEmissionAmount(e.target.value)}
                                             className='text-end'
                                             placeholder=""
                                         />
@@ -95,4 +82,4 @@ const SuspiciousCard = ({ setProcessingState, signer }) => {
     )
 }
 
-export default SuspiciousCard
+export default CheckerInsertCard
