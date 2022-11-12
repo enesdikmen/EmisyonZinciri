@@ -12,6 +12,7 @@
 
 .mainback {
   background-color: var(--bg-color) !important;
+  text-align: center;
 }
 
 .reg-text{
@@ -47,10 +48,15 @@
   background-size: cover;
 }
 
-
 .banner-image-emissions {
   background-image: url('img/banner_img6.jpg');
   background-size: cover;
+}
+.vertical-header {
+  width: 3x;
+  background-color: white !important;
+  opacity: 0.7 !important;
+  
 }
 
 

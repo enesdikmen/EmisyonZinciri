@@ -31,15 +31,19 @@ const Header = ({ }) => {
     return (
 
         <nav className="navbar fixed-top navbar-expand-lg navbar-dark p-md-3">
-            <div className="container">
-            <Navbar.Brand as={Link} to="/"><img
-                                        src={require('../img/tr_logo_white.png')}
-                                        width="180"
-                                        height="50"
-                                        className="d-inline-block align-top"
-                                        alt="React Bootstrap logo"
-                                    /></Navbar.Brand>
-                <Nav.Link as={Link} to="/" className="navbar-brand fs-4" href="emissions"><strong> Emisyon Zinciri</strong></Nav.Link >
+            <div className="container align-middle align-items-center">
+                <Navbar.Brand as={Link} to="/"><img
+                    src={require('../img/tr_logo_white.png')}
+                    width="190"
+                    height="70"
+                    className="d-inline-block align-top"
+                    alt="React Bootstrap logo"
+                /></Navbar.Brand>
+                <div style={{height: "60px", width: "3px, "}} className="vertical-header vr mt-2"></div> 
+
+                <Nav.Link as={Link} to="/" className="ms-3 navbar-brand fs-5 align-middle align-items-center" href="emissions"> 
+                <div className='my-auto'><strong>  Emisyon Zinciri</strong></div>
+                    </Nav.Link >
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -59,7 +63,7 @@ const Header = ({ }) => {
                             <>
 
                                 <li>
-                                    
+
                                 </li>
                                 <li className="nav-item mx-3">
                                     <Nav.Link as={Link} to="/emissions" className="nav-link text-white">Emisyonlar</Nav.Link>

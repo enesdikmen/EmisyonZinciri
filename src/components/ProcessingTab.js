@@ -3,9 +3,7 @@ import { Row, Col, Spinner } from 'react-bootstrap'
 
 
 const ProcessingTab = ({ processingState }) => {
-    let icon = <Spinner className='fs-5' animation="border" />
-
-    // let icon = <span className='fs-4'><strong>&#10003;</strong> </span>
+    let icon = <span className='fs-4'><strong>&#10003;</strong> </span>
     if (processingState.icon === "loading") {
         icon = <Spinner className='fs-5' animation="border" />
     } else if (processingState.icon === "failed") {

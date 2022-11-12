@@ -37,12 +37,6 @@ const MainPage = () => {
                     </Col>
                 </Row>
 
-            <Row>
-                Test buttons:
-                <div>
-                    <Button onClick={()=> {test1();}}>Test1</Button>
-                </div>
-            </Row>
 
             </div>
             <div className="w-100 vh-100 banner-image-main " >
