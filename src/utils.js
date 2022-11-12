@@ -7,8 +7,9 @@ function sleep(milliseconds) {
   }
 
 export function connectWallet() {
+    sleep(2000)
+
     return new Promise((resolve, reject) => {
-        sleep(3000)
         if(true){   
             resolve({detail:'wallet connected', walletId:"ECX-12312"})
 

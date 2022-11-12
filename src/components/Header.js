@@ -14,7 +14,12 @@ const Header = ({ }) => {
     async function handleConnectWallet() {
         console.log("connecting to wallet...");
         try {
-            let res = await connectWallet()
+            let res = await fetch('https://api.rapidmock.com/mocks/89mEw', {
+                method: "GET",
+                headers: {
+                    "x-rapidmock-delay": "2500"
+                },
+            })
             console.log('connected wallet res:', res);
 
             setWalletId(res['walletId'])

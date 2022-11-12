@@ -48,7 +48,10 @@
 }
 
 
-
+.banner-image-emissions {
+  background-image: url('img/banner_img6.jpg');
+  background-size: cover;
+}
 
 
 .App {
