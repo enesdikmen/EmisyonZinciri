@@ -1,0 +1,421 @@
+{
+	"compiler": {
+		"version": "0.8.6+commit.11564f7e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "ppu",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "vfn",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "ns",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "notifier",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "checker",
+						"type": "address"
+					}
+				],
+				"name": "CheckerDesignated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "tracker",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "emissionPointId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "emission",
+						"type": "uint256"
+					}
+				],
+				"name": "EmissionUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "tracker",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "emissionPointId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "blockNum",
+						"type": "uint256"
+					}
+				],
+				"name": "SuspectedEmission",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "tracker",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "isTracker",
+						"type": "bool"
+					}
+				],
+				"name": "TrackerStatus",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "DEVIATION_PERCENTAGE",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "NOTIFIER_SHARE",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "POINT_PER_UPDATE",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "VALUE_FOR_NOTIFICATION",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address[]",
+						"name": "trackers_",
+						"type": "address[]"
+					}
+				],
+				"name": "addTracker",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "notifier_",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "blocknum_",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "emission_",
+						"type": "uint256"
+					}
+				],
+				"name": "checkEmission",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address[]",
+						"name": "checkers_",
+						"type": "address[]"
+					},
+					{
+						"internalType": "address",
+						"name": "notifier_",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp_",
+						"type": "uint256"
+					}
+				],
+				"name": "designateCheckers",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "emissions",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "government",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tracker_",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "emissionPointId_",
+						"type": "uint256"
+					}
+				],
+				"name": "notifySuspiciousEmission",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address[]",
+						"name": "trackers_",
+						"type": "address[]"
+					}
+				],
+				"name": "removeTracker",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "suspiciousEmissions",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "tracker",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "emissionPointId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "totalCheckedEmission",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "checkedNum",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "trackers",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "emissionPointIds_",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "emissions_",
+						"type": "uint256[]"
+					}
+				],
+				"name": "updateEmissions",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"emisyon-zinciri/src/EmissionTrackers.sol": "EmissionTracker"
+		},
+		"evmVersion": "berlin",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"emisyon-zinciri/src/EmissionTrackers.sol": {
+			"keccak256": "0x0bfe3d9aaa9f2124557582b98705e6fda8f7472cade4369f1bf93d2e3dcf9780",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://6c5579ca7d79c93b179655fbab9804d4d5cd6ade8c697d7ac2d0c53e419b1da8",
+				"dweb:/ipfs/QmR8CpLucTHNSqT46recZy42XDzbXC9rmo5KQrw3AddLWr"
+			]
+		}
+	},
+	"version": 1
+}

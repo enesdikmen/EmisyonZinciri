@@ -66,6 +66,14 @@ html, body{
   min-height: 1500px;
 
 }
+
+.banner-image-data {
+  background-image: url('img/banner_img7.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 1500px;
+
+}
 .vertical-header {
   width: 3x;
   background-color: white !important;

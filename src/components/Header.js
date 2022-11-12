@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Button, Nav, Navbar } from 'react-bootstrap'
 import { Link } from "react-router-dom";
 import { connectWallet } from '../utils'
+import { ethers, Signer } from 'ethers'
 
 
-const Header = ({ }) => {
+const Header = ({ setProvider, setSigner, setSignerAddress }) => {
 
     const [isWalletConnected, setIsWalletConnect] = useState(false);
     const [walletId, setWalletId] = useState("");
 
     const [isDark, setIsDark] = useState(false);
 
-    
+
 
 
     useEffect(() => {
@@ -24,23 +25,25 @@ const Header = ({ }) => {
         });
     }, []);
 
-    async function handleConnectWallet() {
-        console.log("connecting to wallet...");
-        try {
-            let res = await fetch('https://api.rapidmock.com/mocks/89mEw', {
-                method: "GET",
-                headers: {
-                    "x-rapidmock-delay": "2500"
-                },
-            })
-            console.log('connected wallet res:', res);
-
-            setWalletId(res['walletId'])
+    const connectWalletHandler = async () => { //digi
+        if (window.ethereum) {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            setProvider(provider);
+            const addresses = await provider.send("eth_requestAccounts");
+            const signer = provider.getSigner();
+            setSignerAddress(addresses[0]);
+            setWalletId("0x..." + addresses[0].slice(-3))
             setIsWalletConnect(true)
-        } catch (err) {
-            console.log(err);
+
+            setSigner(signer);
+            console.log("ok: ", addresses[0], addresses[0].slice(-3));
+        } else {
+            console.log("nok");
+
+
         }
-    }
+    };
+
     return (
 
         <nav id="navbar" className={"navbar fixed-top navbar-expand-lg navbar-dark p-md-3 " + (isDark ? 'header-dark' : '')}>
@@ -91,7 +94,7 @@ const Header = ({ }) => {
 
                             <>
                                 <li className="nav-item mx-3">
-                                    <a onClick={() => { handleConnectWallet(); }} className="nav-link text-white border border-white" href="#">Zincire Bağlan</a>
+                                    <a onClick={() => { connectWalletHandler(); }} className="nav-link text-white border border-white" href="#">Zincire Bağlan</a>
                                 </li>
                             </>
 

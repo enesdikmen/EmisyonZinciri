@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import EmissionInsertCard from '../components/EmissionInsertCard';
 
 import { Stack, Row, Col } from 'react-bootstrap'
-import EmissionHistoryCard from '../components/EmissionHistoryCard';
 
-const EmissionsPage = ({ setProcessingState }) => {
-    const [emissionHistory, setEmissionHistory] = useState([])
+const DataPage = ({ setProcessingState, emissionHistory }) => {
+    const [allEmissions, setAllEmissions] = useState([])
 
 
     useEffect(() => {
@@ -50,7 +48,7 @@ const EmissionsPage = ({ setProcessingState }) => {
 
             console.log("res", result)
 
-            setEmissionHistory(result)
+            setAllEmissions(result)
         }
 
         getUserEmissionHistory();
@@ -60,21 +58,19 @@ const EmissionsPage = ({ setProcessingState }) => {
 
     return (
         <div>
-            <div className="w-100 vh-100 banner-image-emissions " >
+            <div className="w-100 vh-100 banner-image-data " >
 
                 <div className='' style={{ height: '150px' }}></div>
 
                 <Row className='justify-content-center'>
                     <Col xs lg='10'>
                        
-                        <p className='text-start fs-4 reg-text mt-5 mb-1'>Geçmiş Kayıtlarım</p>
+                        <p className='text-start fs-4 reg-text mt-5 mb-1'>Günlük Toplam Kayıtlarım</p>
 
                         <Stack gap={3}>
-                            {Object.keys(emissionHistory).map((item, i) =>
 
-                                <EmissionHistoryCard key={i} setProcessingState={setProcessingState} dailyEmission={emissionHistory[item]}></EmissionHistoryCard>
+                                {/* <EmissionHistoryCard setProcessingState={setProcessingState} dailyEmission={emissionHistory[item]}></EmissionHistoryCard> */}
 
-                            )}
 
                         </Stack>
                     </Col>
@@ -85,4 +81,4 @@ const EmissionsPage = ({ setProcessingState }) => {
     )
 }
 
-export default EmissionsPage
+export default DataPage

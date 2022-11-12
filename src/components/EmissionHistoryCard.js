@@ -9,7 +9,7 @@ const EmissionHistoryCard = ({ setProcessingState, dailyEmission }) => {
 
 
     return (
-        <Card className='w-100 reg-card'>
+        <Card className='w-100 reg-card mb-3'>
             <Card.Body className='p-1'>
                 <Card.Title className='text-start'>
                     
