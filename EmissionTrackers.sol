@@ -49,7 +49,8 @@ contract EmissionTracker{
 
     event SuspectedEmission(
         address indexed tracker,
-        uint indexed emissionPointId
+        uint indexed emissionPointId,
+        uint blockNum
     );
 
     event CheckerDesignated(
@@ -117,6 +118,7 @@ contract EmissionTracker{
         require(len == emissions_.length, "Inputs must be same length");
         while (i < len){
             emissions[msg.sender][emissionPointIds_[i]] = emissions_[i];
+            trackers[msg.sender] += POINT_PER_UPDATE; 
             emit EmissionUpdated(msg.sender, emissionPointIds_[i], emissions_[i]);
             unchecked {i++;}
         }
@@ -132,7 +134,7 @@ contract EmissionTracker{
         SuspiciousEmission storage s = suspiciousEmissions[msg.sender][block.number];
         s.tracker = tracker_;
         s.emissionPointId = emissionPointId_;
-        emit SuspectedEmission(tracker_, emissionPointId_);
+        emit SuspectedEmission(tracker_, emissionPointId_, block.number);
     }
 
 
