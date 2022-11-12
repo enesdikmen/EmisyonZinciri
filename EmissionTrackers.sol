@@ -5,12 +5,14 @@ pragma solidity >=0.7.0 <0.9.0;
 contract EmissionTracker{
 
     address public immutable government;
+    uint public POINT_PER_UPDATE;
     uint public VALUE_FOR_NOTIFICATION;
     uint public DEVIATION_PERCENTAGE;
     uint public NOTIFIER_SHARE;
 
-    constructor(uint vfn, uint dp, uint ns){
+    constructor(uint ppu, uint vfn, uint dp, uint ns){
         government = msg.sender;
+        POINT_PER_UPDATE = ppu;
         VALUE_FOR_NOTIFICATION = vfn;
         DEVIATION_PERCENTAGE = dp;
         NOTIFIER_SHARE = ns;
@@ -57,9 +59,9 @@ contract EmissionTracker{
     );
 
     
-    mapping (address => uint) trackers; //points
-    mapping (address => mapping(uint => uint)) emissions; //daily basis
-    mapping (address => mapping(uint => SuspiciousEmission)) suspiciousEmissions;
+    mapping (address => uint) public trackers; //points
+    mapping (address => mapping(uint => uint)) public emissions; //daily basis
+    mapping (address => mapping(uint => SuspiciousEmission)) public suspiciousEmissions;
     //[notifier][blockNumber]
 
     function addTracker(
@@ -123,7 +125,7 @@ contract EmissionTracker{
     function notifySuspiciousEmission(
         address tracker_,
         uint emissionPointId_
-    ) external payable {
+    ) external {
         // notifier and tracker has some point to give checkers
         require( trackers[msg.sender] > VALUE_FOR_NOTIFICATION &&
             trackers[tracker_] > VALUE_FOR_NOTIFICATION);
@@ -152,7 +154,7 @@ contract EmissionTracker{
             unchecked {i++;}
         }
         if(len == s.checkedNum) // if all designated checkers measured emission
-            setCheckedEmission(notifier_, s.checkers, s.tracker, s.emissionPointId, s.totalCheckedEmission);
+            setCheckedEmission(notifier_, s.checkers, s.tracker, s.emissionPointId, s.totalCheckedEmission, blocknum_);
     }
 
     function setCheckedEmission(
@@ -160,14 +162,18 @@ contract EmissionTracker{
         address[] memory checkers_,
         address tracker_,
         uint emissionPointId_,
-        uint totalCheckedEmission_
+        uint totalCheckedEmission_,
+        uint blocknum_
     )internal {
         uint avarageEmission = totalCheckedEmission_ / checkers_.length;
         uint suspiciousEmission = emissions[tracker_][emissionPointId_];
  
         if( avarageEmission < suspiciousEmission * (100 - DEVIATION_PERCENTAGE)
-        || avarageEmission > suspiciousEmission * (100 + DEVIATION_PERCENTAGE)){
+            || avarageEmission > suspiciousEmission * (100 + DEVIATION_PERCENTAGE))
+        {
             emissions[notifier_][emissionPointId_] = avarageEmission; // correct value
+            emit EmissionUpdated(notifier_, emissionPointId_, avarageEmission);
+            
             if(trackers[tracker_] > VALUE_FOR_NOTIFICATION)
                 trackers[tracker_] -= VALUE_FOR_NOTIFICATION;
             else
@@ -175,6 +181,8 @@ contract EmissionTracker{
             
             // notifier share
             trackers[notifier_] += VALUE_FOR_NOTIFICATION * NOTIFIER_SHARE / 100;
+
+            delete emissions[tracker_][emissionPointId_]; // gas refund
         }
         else{
             if(trackers[notifier_] > VALUE_FOR_NOTIFICATION)
@@ -190,5 +198,7 @@ contract EmissionTracker{
             trackers[checkers_[i]] += VALUE_FOR_NOTIFICATION / len;
             unchecked {i++;}
         }
+
+        delete suspiciousEmissions[notifier_][blocknum_]; // gas refund
     }
 }
