@@ -5,10 +5,15 @@ pragma solidity >=0.7.0 <0.9.0;
 contract EmissionTracker{
 
     address public immutable government;
-    // uint immutable CONTROL_NUM;
+    uint public VALUE_FOR_NOTIFICATION;
 
-    constructor(){
+    constructor(uint vfn){
         government = msg.sender;
+        VALUE_FOR_NOTIFICATION = vfn;
+    }
+    modifier byGovernment{
+        require(msg.sender == government, "Only government can add tracker");
+        _;
     }
 
     struct Checkers{
@@ -16,10 +21,11 @@ contract EmissionTracker{
         uint emission;
     }
 
-    struct suspiciousEmission{
+    struct SuspiciousEmission{
         address tracker;
-        uint companyId;
+        uint emissionPointId;
         address[] checkers;
+        uint checkedNum;
     }
 
     event TrackerStatus(
@@ -33,7 +39,7 @@ contract EmissionTracker{
         uint emission
     );
 
-    event SuspiciousEmission(
+    event SuspectedEmission(
         address indexed tracker,
         uint indexed emissionPointId
     );
@@ -47,14 +53,10 @@ contract EmissionTracker{
     
     mapping (address => uint) trackers; //points
     mapping (address => mapping(uint => uint)) emissions; //daily basis
-    mapping (address => mapping(uint => suspiciousEmission)) suspiciousEmissions;
+    mapping (address => mapping(uint => SuspiciousEmission)) suspiciousEmissions;
+    //[notifier][blockNumber]
+    mapping(address => uint) checkedEmissions;
 
-    //[reporter][timestamp]
-
-    modifier byGovernment{
-        require(msg.sender == government, "Only government can add tracker");
-        _;
-    }
 
     function addTracker(
         address[] calldata trackers_
@@ -100,19 +102,59 @@ contract EmissionTracker{
     }
 
     function updateEmissions(
-        uint[] calldata companyIds_,
+        uint[] calldata emissionPointIds_,
         uint[] calldata emissions_)
     external {
         require(trackers[msg.sender] > 0, "Only Authorized trackers can update emissions");
         uint i = 0;
-        uint len = companyIds_.length;
+        uint len = emissionPointIds_.length;
         require(len == emissions_.length, "Inputs must be same length");
         while (i < len){
-            emissions[msg.sender][companyIds_[i]] = emissions_[i];
-            emit EmissionUpdated(msg.sender, companyIds_[i], emissions_[i]);
+            emissions[msg.sender][emissionPointIds_[i]] = emissions_[i];
+            emit EmissionUpdated(msg.sender, emissionPointIds_[i], emissions_[i]);
             unchecked {i++;}
         }
     }
 
+    function notifySuspiciousEmission(
+        address tracker_,
+        uint emissionPointId_
+    ) external payable {
+        // notifier and tracker has some point to give checkers
+        require( trackers[msg.sender] > VALUE_FOR_NOTIFICATION &&
+            trackers[tracker_] > VALUE_FOR_NOTIFICATION);
+        SuspiciousEmission storage s = suspiciousEmissions[msg.sender][block.number];
+        s.tracker = tracker_;
+        s.emissionPointId = emissionPointId_;
+        emit SuspectedEmission(tracker_, emissionPointId_);
+    }
 
+
+    function checkEmission(
+        address notifier_,
+        uint blocknum_,
+        uint emission_
+    ) external {
+        SuspiciousEmission memory s = suspiciousEmissions[notifier_][blocknum_];
+        uint i = 0;
+        uint len = s.checkers.length;
+        while (i < len){
+            if(msg.sender == s.checkers[i]){ //if he/she has duty
+                checkedEmissions[msg.sender] = emission_;
+                unchecked {s.checkedNum++;}
+            }
+            unchecked {i++;}
+        }
+        if(len == s.checkedNum) // if all designated checkers measured emission
+            setCheckedEmission(notifier_, s.checkers, s.tracker, s.emissionPointId);
+    }
+
+    function setCheckedEmission(
+        address notifier_,
+        address[] memory checkers_,
+        address tracker_,
+        uint emissionPointId_
+    )internal {
+
+    }
 }
