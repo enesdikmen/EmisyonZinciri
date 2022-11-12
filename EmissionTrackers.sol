@@ -6,11 +6,16 @@ contract EmissionTracker{
 
     address public immutable government;
     uint public VALUE_FOR_NOTIFICATION;
+    uint public DEVIATION_PERCENTAGE;
+    uint public NOTIFIER_SHARE;
 
-    constructor(uint vfn){
+    constructor(uint vfn, uint dp, uint ns){
         government = msg.sender;
         VALUE_FOR_NOTIFICATION = vfn;
+        DEVIATION_PERCENTAGE = dp;
+        NOTIFIER_SHARE = ns;
     }
+
     modifier byGovernment{
         require(msg.sender == government, "Only government can add tracker");
         _;
@@ -25,6 +30,7 @@ contract EmissionTracker{
         address tracker;
         uint emissionPointId;
         address[] checkers;
+        uint totalCheckedEmission;
         uint checkedNum;
     }
 
@@ -55,8 +61,6 @@ contract EmissionTracker{
     mapping (address => mapping(uint => uint)) emissions; //daily basis
     mapping (address => mapping(uint => SuspiciousEmission)) suspiciousEmissions;
     //[notifier][blockNumber]
-    mapping(address => uint) checkedEmissions;
-
 
     function addTracker(
         address[] calldata trackers_
@@ -140,21 +144,51 @@ contract EmissionTracker{
         uint len = s.checkers.length;
         while (i < len){
             if(msg.sender == s.checkers[i]){ //if he/she has duty
-                checkedEmissions[msg.sender] = emission_;
-                unchecked {s.checkedNum++;}
+                unchecked {
+                    s.totalCheckedEmission += emission_; 
+                    s.checkedNum ++;
+                }
             }
             unchecked {i++;}
         }
         if(len == s.checkedNum) // if all designated checkers measured emission
-            setCheckedEmission(notifier_, s.checkers, s.tracker, s.emissionPointId);
+            setCheckedEmission(notifier_, s.checkers, s.tracker, s.emissionPointId, s.totalCheckedEmission);
     }
 
     function setCheckedEmission(
         address notifier_,
         address[] memory checkers_,
         address tracker_,
-        uint emissionPointId_
+        uint emissionPointId_,
+        uint totalCheckedEmission_
     )internal {
+        uint avarageEmission = totalCheckedEmission_ / checkers_.length;
+        uint suspiciousEmission = emissions[tracker_][emissionPointId_];
+ 
+        if( avarageEmission < suspiciousEmission * (100 - DEVIATION_PERCENTAGE)
+        || avarageEmission > suspiciousEmission * (100 + DEVIATION_PERCENTAGE)){
+            emissions[notifier_][emissionPointId_] = avarageEmission; // correct value
+            if(trackers[tracker_] > VALUE_FOR_NOTIFICATION)
+                trackers[tracker_] -= VALUE_FOR_NOTIFICATION;
+            else
+                trackers[tracker_] =1;
+            
+            // notifier share
+            trackers[notifier_] += VALUE_FOR_NOTIFICATION * NOTIFIER_SHARE / 100;
+        }
+        else{
+            if(trackers[notifier_] > VALUE_FOR_NOTIFICATION)
+                trackers[notifier_] -= VALUE_FOR_NOTIFICATION;
+            else
+                trackers[notifier_] =1;
+        }
 
+        //checkers shares
+        uint i = 0;
+        uint len = checkers_.length;
+        while (i < len){
+            trackers[checkers_[i]] += VALUE_FOR_NOTIFICATION / len;
+            unchecked {i++;}
+        }
     }
 }
