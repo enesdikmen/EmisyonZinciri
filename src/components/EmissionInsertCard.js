@@ -23,7 +23,7 @@ const EmissionInsertCard = ({ setProcessingState }) => {
         setProcessingState({ show: true, text: "Emisyon girildi.", icon: "done" })
         setTimeout(() => {
             setProcessingState({ show: false, text: "Emisyon girildi.", icon: "done"});
-        }, 2000);
+        }, 100000);
 
     }
 

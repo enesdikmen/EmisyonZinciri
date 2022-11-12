@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Nav } from 'react-bootstrap'
+import { Button, Nav, Navbar } from 'react-bootstrap'
 import { Link } from "react-router-dom";
 import { connectWallet } from '../utils'
 
@@ -32,7 +32,14 @@ const Header = ({ }) => {
 
         <nav className="navbar fixed-top navbar-expand-lg navbar-dark p-md-3">
             <div className="container">
-            <Nav.Link as={Link} to="/"className="navbar-brand fs-3" href="emissions"><strong> Emisyon Zinciri</strong></Nav.Link >
+            <Navbar.Brand as={Link} to="/"><img
+                                        src={require('../img/tr_logo_white.png')}
+                                        width="180"
+                                        height="50"
+                                        className="d-inline-block align-top"
+                                        alt="React Bootstrap logo"
+                                    /></Navbar.Brand>
+                <Nav.Link as={Link} to="/" className="navbar-brand fs-4" href="emissions"><strong> Emisyon Zinciri</strong></Nav.Link >
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -50,6 +57,10 @@ const Header = ({ }) => {
                     <ul className="navbar-nav fs-6">
                         {isWalletConnected ?
                             <>
+
+                                <li>
+                                    
+                                </li>
                                 <li className="nav-item mx-3">
                                     <Nav.Link as={Link} to="/emissions" className="nav-link text-white">Emisyonlar</Nav.Link>
                                 </li>
