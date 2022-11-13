@@ -5,7 +5,7 @@ import EmissionHistoryCard from '../components/EmissionHistoryCard';
 import SuspiciousCard from '../components/SuspiciousCard';
 import CheckerInsertCard from '../components/CheckerInsertCard';
 
-const EmissionsPage = ({ setProcessingState, emissionHistory, signer, blockNum, notifier, checkEmissionPoint }) => {
+const EmissionsPage = ({ setProcessingState, emissionHistory, signer, blockNum, notifier, checkEmissionPoint, setCheckEmissionPoint }) => {
 
 
 
@@ -16,10 +16,10 @@ const EmissionsPage = ({ setProcessingState, emissionHistory, signer, blockNum, 
                 <div className='' style={{ height: '150px' }}></div>
                 <Row className='justify-content-center'>
                     <Col xs lg='10'>
-                        {(checkEmissionPoint !=0 && checkEmissionPoint !=null) &&
+                        {(checkEmissionPoint != 0 && checkEmissionPoint != null) &&
                             <>
                                 <p className='text-start fs-4 reg-text mt-2 mb-2'>Şüpheli Emisyon Kontrol Sonucu</p>
-                                <CheckerInsertCard className='mb-5' setProcessingState={setProcessingState} signer={signer} checkEmissionPoint={checkEmissionPoint} blockNum={blockNum} notifier={notifier}></CheckerInsertCard>
+                                <CheckerInsertCard className='mb-5' setProcessingState={setProcessingState} signer={signer} checkEmissionPoint={checkEmissionPoint} blockNum={blockNum} notifier={notifier} setCheckEmissionPoint={setCheckEmissionPoint}></CheckerInsertCard>
                             </>
                         }
                         <p className='text-start fs-4 reg-text mt-2 mb-2'>Şüpheli Emisyon Bildir</p>

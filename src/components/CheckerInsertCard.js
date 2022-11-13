@@ -3,7 +3,7 @@ import { Row, Col, Button, Card, Form, InputGroup } from 'react-bootstrap'
 import { waitFor } from '../utils'
 import contract  from '../contract'
 
-const CheckerInsertCard = ({ setProcessingState, signer, notifier, blockNum, checkEmissionPoint }) => {
+const CheckerInsertCard = ({ setProcessingState, signer, notifier, blockNum, checkEmissionPoint, setCheckEmissionPoint }) => {
 
     const [emissionPointID, setEmissionPointID] = useState("")
     const [emissionAmount, setEmissionAmount] = useState("")
@@ -13,6 +13,7 @@ const CheckerInsertCard = ({ setProcessingState, signer, notifier, blockNum, che
     const handleNotify = async () =>{
         const res = await myContract.checkEmission(notifier, blockNum, 20)
         await res.wait()
+        setCheckEmissionPoint(null)
     }
 
     return (
