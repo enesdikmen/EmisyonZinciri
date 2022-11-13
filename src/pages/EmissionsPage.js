@@ -14,12 +14,14 @@ const EmissionsPage = ({ setProcessingState, emissionHistory, signer, blockNum, 
             <div className="w-100 vh-100 banner-image-emissions " >
 
                 <div className='' style={{ height: '150px' }}></div>
-
                 <Row className='justify-content-center'>
                     <Col xs lg='10'>
-                        <p className='text-start fs-4 reg-text mt-2 mb-2'>Şüpheli Emisyon Bildir</p>
-
-                        <CheckerInsertCard className='mb-5' setProcessingState={setProcessingState} signer={signer} checkEmissionPoint={checkEmissionPoint} blockNum={blockNum} notifier={notifier}></CheckerInsertCard>
+                        {(checkEmissionPoint !=0 && checkEmissionPoint !=null) &&
+                            <>
+                                <p className='text-start fs-4 reg-text mt-2 mb-2'>Şüpheli Emisyon Kontrol Sonucu</p>
+                                <CheckerInsertCard className='mb-5' setProcessingState={setProcessingState} signer={signer} checkEmissionPoint={checkEmissionPoint} blockNum={blockNum} notifier={notifier}></CheckerInsertCard>
+                            </>
+                        }
                         <p className='text-start fs-4 reg-text mt-2 mb-2'>Şüpheli Emisyon Bildir</p>
 
                         <SuspiciousCard className='mb-5' setProcessingState={setProcessingState} signer={signer}></SuspiciousCard>
@@ -39,7 +41,7 @@ const EmissionsPage = ({ setProcessingState, emissionHistory, signer, blockNum, 
                     </Col>
                 </Row>
             </div>
-        </div>
+        </div >
 
     )
 }

@@ -36,6 +36,7 @@ const CheckerInsertCard = ({ setProcessingState, signer, notifier, blockNum, che
                                             value={checkEmissionPoint}
                                             className='text-end'
                                             placeholder=""
+                                            disabled
                                         />
                                     </InputGroup>
                                 </Col>

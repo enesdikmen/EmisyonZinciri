@@ -47,16 +47,13 @@ const MyDataCard = ({ setProcessingState }) => {
         datasets: [
             {
                 label: 'Dataset 1',
-                data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+                data: [1,2,3,4,5,6,7],
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
             }
            
         ],
     };
 
-    function App() {
-        return <Bar options={options} data={data} />;
-    }
 
 
 
@@ -65,6 +62,7 @@ const MyDataCard = ({ setProcessingState }) => {
 
             <Card.Body>
                 <Row className='mt-5'>
+                <Bar options={options} data={data} />;
 
 
 

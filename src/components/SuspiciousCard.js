@@ -47,7 +47,6 @@ const SuspiciousCard = ({ setProcessingState, signer }) => {
                                             type='text'
                                             value={emissionPointID}
                                             onInput={e => setEmissionPointID(e.target.value)}
-                                            className='text-end'
                                             placeholder=""
                                         />
                                     </InputGroup>
@@ -66,7 +65,6 @@ const SuspiciousCard = ({ setProcessingState, signer }) => {
 
                                             value={trackerAddress}
                                             onInput={e => setTrackerAddress(e.target.value)}
-                                            className='text-end'
                                             placeholder=""
                                         />
                                         {/* <InputGroup.Text>x</InputGroup.Text> */}

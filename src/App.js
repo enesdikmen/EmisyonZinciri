@@ -25,9 +25,9 @@ function App() {
   const [signerAddress, setSignerAddress] = useState(null)
   const [notifier, setNotifier] = useState(null)
   const [blockNum, setBlockNum] = useState(null)
-  const [userEmissionData, setUserEmissionData] = useState(null)
 
   const [checkEmissionPoint, setCheckEmissionPoint] = useState("")
+  const [conrolNotification, setControlNotification] = useState()
 
   var myContract = contract();
 
@@ -42,37 +42,61 @@ function App() {
 
       let userEmissionsFilter = myContract.filters.EmissionUpdated(signerAddress)
       let userEmissions = await myContract.queryFilter(userEmissionsFilter, -2000, "latest")
-      console.log("res: ", res);
+      console.log("user emissions: ", userEmissions);
       
+      let temp = []
+      console.log("i:", userEmissions[0], "len", userEmissions.length);
 
-      for(let i=0; i<userEmissions.lenght; i++){
+      for(let i=0; i<userEmissions.length; i++){
+        var userDataLabels = []
+        var userDatas = []
+
+        // temp.push(userEmissions[i].);
 
       }
-       res = res[0]?.args
+      setEmissionHistory(temp)
+
+      console.log("temp: ", temp);
       
-      console.log("filter res: ", res.tracker.toString());
-      console.log("filter res: ", res.emissionPointId.toString());
-      console.log("filter res: ", res.emission.toNumber());
+      
+      // console.log("filter res: ", res.tracker.toString());
+      // console.log("filter res: ", res.emissionPointId.toString());
+      // console.log("filter res: ", res.emission.toNumber());
 
       let notificationsFilter = myContract.filters.CheckerDesignated(null, null, signerAddress)
       let resNotif = await myContract.queryFilter(notificationsFilter, -2000, "latest")
-      console.log("resnotif: ", resNotif[0].args.timestamp.toString());
-      var blockNumber = resNotif[0].args.timestamp.toString()
-      var notifier = resNotif[0].args.notifier.toString()
+      console.log("login kontrol ataması sonuç: ", resNotif);
+      if(!resNotif[resNotif.length -1 ]){//notification yok
+        setBlockNum(null)
+        setNotifier(null)
+        setCheckEmissionPoint(null)
+      }else{//notification var
+
+      var blockNumber = resNotif[resNotif.length -1].args.timestamp.toString()
+console.log("0",resNotif[0].args.timestamp.toString())
+console.log("last",resNotif[resNotif.length -1].args.timestamp.toString())
+
+
+      // var blockNumber = resNotif[0].blockNumber.toString()
+
+      var notifier = resNotif[resNotif.length -1].args.notifier.toString()
       setBlockNum(blockNumber)
       setNotifier(notifier)
-      console.log("resnotif: ", blockNumber, notifier);
 
 
       let resSusp = await myContract.suspiciousEmissions(notifier, blockNumber)
-      console.log("susp:", resSusp.emissionPointId.toString());
       setCheckEmissionPoint(resSusp.emissionPointId.toString())
+    
+      console.log("notifitacion values: ", blockNumber, notifier, resSusp.emissionPointId.toString());
+
+        
+      }
+      
       // let blockNumber = resNotif?.[0].args[]
 
 
 
 
-      // setEmissionHistory(result)
     }
 
     getUserEmissionHistory();
