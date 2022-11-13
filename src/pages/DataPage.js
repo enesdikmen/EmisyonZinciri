@@ -5,6 +5,7 @@ import contract from '../contract'
 import MyDataCard from '../components/MyDataCard';
 import AllDataTableCard from '../components/AllDataTableCard';
 
+import SuspiciousCard from '../components/SuspiciousCard';
 
 const DataPage = ({ setProcessingState, emissionHistory, signer }) => {
     const [allEmissions, setAllEmissions] = useState([])
@@ -92,15 +93,18 @@ const DataPage = ({ setProcessingState, emissionHistory, signer }) => {
 
                 <Row className='justify-content-center'>
                     <Col xs lg='10'>
+                    <p className='text-start fs-4 reg-text mt-2 mb-2'>Şüpheli Emisyon Bildir</p>
+
+<SuspiciousCard className='mb-5' setProcessingState={setProcessingState} signer={signer}></SuspiciousCard>
                         
                         <p className='text-start fs-4 reg-text mt-5 mb-1'>Genel emisyon kayıtları</p>
                         <AllDataTableCard allData={allEmissions}></AllDataTableCard>
 
-                        <p className='text-start fs-4 reg-text mt-5 mb-1'>Günlük Toplam Kayıtlarım</p>
+                        {/* <p className='text-start fs-4 reg-text mt-5 mb-1'>Günlük Toplam Kayıtlarım</p>
                         <MyDataCard emissionHistory={emissionHistory}></MyDataCard>
 
                         <p className='text-start fs-4 reg-text mt-5 mb-1'>Ülke Geneli Emisyonlar</p>
-                        <MyDataCard emissionHistory={emissionHistory}></MyDataCard>
+                        <MyDataCard emissionHistory={emissionHistory}></MyDataCard> */}
 
                     </Col>
                 </Row>

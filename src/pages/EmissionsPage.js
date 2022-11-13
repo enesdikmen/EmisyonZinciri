@@ -4,10 +4,11 @@ import { Stack, Row, Col } from 'react-bootstrap'
 import EmissionHistoryCard from '../components/EmissionHistoryCard';
 import SuspiciousCard from '../components/SuspiciousCard';
 import CheckerInsertCard from '../components/CheckerInsertCard';
+import AllDataUserCard from '../components/AllDataUserCard';
 
 const EmissionsPage = ({ setProcessingState, emissionHistory, signer, blockNum, notifier, checkEmissionPoint, setCheckEmissionPoint }) => {
 
-
+    console.log("emis page:", emissionHistory);
 
     return (
         <div>
@@ -22,20 +23,18 @@ const EmissionsPage = ({ setProcessingState, emissionHistory, signer, blockNum, 
                                 <CheckerInsertCard className='mb-5' setProcessingState={setProcessingState} signer={signer} checkEmissionPoint={checkEmissionPoint} blockNum={blockNum} notifier={notifier} setCheckEmissionPoint={setCheckEmissionPoint}></CheckerInsertCard>
                             </>
                         }
-                        <p className='text-start fs-4 reg-text mt-2 mb-2'>Şüpheli Emisyon Bildir</p>
-
-                        <SuspiciousCard className='mb-5' setProcessingState={setProcessingState} signer={signer}></SuspiciousCard>
+                  
 
                         <p className='text-start fs-4 reg-text mt-5 mb-1'>Geçmiş Kayıtlarım</p>
 
 
                         <Stack gap={3}>
-
-                            {Object.keys(emissionHistory).map((item, i) =>
+                            <AllDataUserCard allData={emissionHistory}></AllDataUserCard>
+                            {/* {Object.keys(emissionHistory).map((item, i) =>
 
                                 <EmissionHistoryCard key={i} setProcessingState={setProcessingState} dailyEmission={emissionHistory[item]}></EmissionHistoryCard>
 
-                            )}
+                            )} */}
 
                         </Stack>
                     </Col>

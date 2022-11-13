@@ -12,8 +12,9 @@ const CheckerInsertCard = ({ setProcessingState, signer, notifier, blockNum, che
     myContract = myContract.connect(signer)
     const handleNotify = async () =>{
         const res = await myContract.checkEmission(notifier, blockNum, 20)
-        await res.wait()
         setCheckEmissionPoint(null)
+
+        await res.wait()
     }
 
     return (

@@ -43,23 +43,47 @@ function App() {
       let userEmissions = await myContract.queryFilter(userEmissionsFilter, -2000, "latest")
       console.log("user emissions: ", userEmissions);
 
+      //start parsing
       let temp = []
-      console.log("i:", userEmissions[0], "len", userEmissions.length);
 
-      for (let i = 0; i < userEmissions.length; i++) {
+      if (userEmissions.length > 0) {
+        let day = 13
         temp.push({
-          "emissionPointId":userEmissions[i].args.emissionPointId.toString(),
-          "emissionAmount":  userEmissions[i].args.emission.toString(),
-          // "date":  userEmissions[i].args.emission.toString(),
+          "emissionPointId": userEmissions[userEmissions.length - 1].args.emissionPointId.toString(),
+          "emissionAmount": userEmissions[userEmissions.length - 1].args.emission.toString(),
+
+          "date": day + ".11.2022"
 
         })
+        for (let i = userEmissions.length - 2; i >= 0; i--) {
 
-        // temp.push(userEmissions[i].);
+
+          let toPush = {
+            "emissionPointId": userEmissions[i].args.emissionPointId.toString(),
+            "emissionAmount": userEmissions[i].args.emission.toString(),
+
+            "date": ((e) => {
+              if (userEmissions[i].blockNumber == userEmissions[i + 1]?.blockNumber) {
+                return day.toString() + ".11.2022"
+              } else {
+                day = day - 1;
+                return day.toString() + ".11.2022"
+              }
+
+            })()
+
+
+          }
+
+          temp.push(toPush)
+
+        }
+        setEmissionHistory(temp)
+
 
       }
-      setEmissionHistory(temp)
-
-      console.log("temp: ", temp);
+      //end parsing
+      console.log("main temp: ", temp);
 
 
       // console.log("filter res: ", res.tracker.toString());
@@ -117,7 +141,7 @@ function App() {
         <Routes >
 
           <Route path="" element={<MainPage />} />
-          <Route path="emissions" element={<EmissionsPage setProcessingState={setProcessingState} emissionHistory={emissionHistory} signer={signer} notifier={notifier} blockNum={blockNum} checkEmissionPoint={checkEmissionPoint}  setCheckEmissionPoint={setCheckEmissionPoint}/>} />
+          <Route path="emissions" element={<EmissionsPage setProcessingState={setProcessingState} emissionHistory={emissionHistory} signer={signer} notifier={notifier} blockNum={blockNum} checkEmissionPoint={checkEmissionPoint} setCheckEmissionPoint={setCheckEmissionPoint} />} />
           <Route path="data" element={<DataPage setProcessingState={setProcessingState} emissionHistory={emissionHistory} signer={signer} />} />
 
 
